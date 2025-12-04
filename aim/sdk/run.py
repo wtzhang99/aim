@@ -21,6 +21,7 @@ from aim.ext.utils import (
     get_git_info,
     get_installed_packages,
 )
+from aim.ext.transport.control_client import ControlClient
 from aim.sdk.base_run import BaseRun
 from aim.sdk.logging import LogRecord, LogRecords
 from aim.sdk.objects.artifact import Artifact
@@ -267,12 +268,21 @@ class BasicRun(BaseRun, StructuredRunMixin):
         read_only: bool = False,
         experiment: Optional[str] = None,
         force_resume: bool = False,
+        interactive: bool = False,
     ):
         self._resources: Optional[BasicRunAutoClean] = None
         super().__init__(run_hash, repo=repo, read_only=read_only, force_resume=force_resume)
 
         self.meta_attrs_tree: TreeView = self.meta_tree.subtree('attrs')
         self.meta_run_attrs_tree: TreeView = self.meta_run_tree.subtree('attrs')
+
+
+        if not read_only and interactive:
+            remote_url = "localhost:43800" if not self.repo.is_remote_repo else self.repo._client._remote_path.replace("aim://", "ws://")
+            self._control_client = ControlClient(self.hash, remote_url=remote_url)
+        else:
+            self._control_client = None
+
 
         if not read_only:
             logger.debug(f'Opening Run {self.hash} in write mode')
@@ -846,8 +856,9 @@ class Run(BasicRun):
         system_tracking_interval: Optional[Union[int, float]] = DEFAULT_SYSTEM_TRACKING_INT,
         log_system_params: Optional[bool] = False,
         capture_terminal_logs: Optional[bool] = True,
+        interactive: bool = False,
     ):
-        super().__init__(run_hash, repo=repo, read_only=read_only, experiment=experiment, force_resume=force_resume)
+        super().__init__(run_hash, repo=repo, read_only=read_only, experiment=experiment, force_resume=force_resume, interactive=interactive)
 
         self._system_resource_tracker: ResourceTracker = None
         if not read_only:

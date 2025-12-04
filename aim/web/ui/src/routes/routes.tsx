@@ -16,6 +16,10 @@ const Metrics = React.lazy(
   () =>
     import(/* webpackChunkName: "metrics" */ 'pages/Metrics/MetricsContainer'),
 );
+const Control = React.lazy(
+  () =>
+    import(/* webpackChunkName: "control" */ 'pages/Control/ControlContainer'),
+);
 const Params = React.lazy(
   () => import(/* webpackChunkName: "params" */ 'pages/Params/ParamsContainer'),
 );
@@ -104,6 +108,15 @@ const routes: { [key: string]: any } = {
     icon: 'metrics',
     isExact: true,
     title: pageTitlesEnum.METRICS_EXPLORER,
+  },
+  CONTROL: {
+    path: PathEnum.Control,
+    component: Control,
+    showInSidebar: true,
+    displayName: 'Control',
+    icon: 'box-settings',
+    isExact: true,
+    title: pageTitlesEnum.CONTROL,
   },
   METRICS_ID: {
     path: PathEnum.Metrics_Id,

@@ -54,13 +54,15 @@ SETUP_REQUIRED = [
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    f'aim-ui=={__version__}',
+    # f'aim-ui=={__version__}',
+    'aim-ui>=3.29.1',
     'aimrecords==0.0.7',
     'aimrocks==0.5.*',
     'cachetools>=4.0.0',
     'click>=7.0',
     'cryptography>=3.0',
     'filelock<4,>=3.3.0',
+    'httpx>=0.24.0',
     'numpy<3,>=1.12.0',
     'psutil>=5.6.7',
     'RestrictedPython>=5.1',

@@ -125,3 +125,6 @@ coverage_html_report/
 aim/storage/**/*.cpp
 
 .ruff_cache
+
+PHASE1_WEBSOCKET_IMPLEMENTATION.md
+TRAINING_CONTROL_DESIGN_PLAN.md

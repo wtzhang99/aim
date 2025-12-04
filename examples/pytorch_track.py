@@ -1,5 +1,8 @@
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
+
 import torch
 import torch.nn as nn
 import torchvision
@@ -10,7 +13,7 @@ from aim.pytorch import track_gradients_dists, track_params_dists
 
 
 # Initialize a new Run
-aim_run = Run()
+aim_run = Run(repo="/Users/kstarxin/Documents/test_aim")
 
 # moving model to gpu if available
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
