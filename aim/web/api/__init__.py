@@ -32,7 +32,7 @@ def create_app():
     from aim.web.api.runs.views import add_api_routes, runs_router
     from aim.web.api.tags.views import tags_router
     from aim.web.api.utils import ResourceCleanupMiddleware
-    from aim.web.api.views import statics_router
+    from aim.web.api.views import agent_router, statics_router
     from aim.web.configs import AIM_UI_BASE_PATH
 
     api_app = FastAPI()
@@ -55,6 +55,8 @@ def create_app():
     api_app.include_router(runs_router, prefix='/runs')
     api_app.include_router(tags_router, prefix='/tags')
     api_app.include_router(reports_router, prefix='/reports')
+    api_app.include_router(agent_router, prefix='/agent')
+
 
     base_path = os.environ.get(AIM_UI_BASE_PATH, '')
 

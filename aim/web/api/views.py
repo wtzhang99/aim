@@ -1,3 +1,4 @@
+import json
 import os
 
 from pathlib import Path
@@ -9,7 +10,36 @@ from fastapi.responses import FileResponse, HTMLResponse
 
 
 statics_router = APIRouter()
+agent_router = APIRouter()
 
+_ALLOWED_AGENT_ANSWER_FILES = {'1.json', '2.json'}
+_AGENT_ANSWER_DIRS = (
+    Path(__file__).resolve().parents[2] / 'text_json',
+    Path(__file__).resolve().parents[3] / 'text_json',
+)
+
+
+def _load_agent_answer(filename: str):
+    if filename not in _ALLOWED_AGENT_ANSWER_FILES:
+        raise HTTPException(status_code=404)
+
+    searched_paths = []
+    for base_dir in _AGENT_ANSWER_DIRS:
+        file_path = base_dir / filename
+        searched_paths.append(str(file_path))
+        if file_path.exists():
+            with file_path.open('r', encoding='utf-8') as file_handle:
+                return json.load(file_handle)
+
+    raise HTTPException(
+        status_code=404,
+        detail=f'File not found. Checked: {searched_paths}',
+    )
+
+
+@agent_router.get('/agent-answers/{filename}')
+async def get_agent_answer(filename: str):
+    return _load_agent_answer(filename)
 
 @statics_router.get('/static-files/{path:path}/')
 async def serve_static_files(path):
@@ -30,6 +60,11 @@ async def serve_static_files(path):
         return FileResponse(compressed_file_name, headers={'Content-Encoding': 'gzip'})
     return FileResponse(static_file_name)
 
+# Xuanhe Pan
+# Move this section BEFORE the serve_index_html method  
+@statics_router.get('/agent-answers/{filename}')
+async def serve_agent_answer(filename: str):
+    return _load_agent_answer(filename)
 
 # do not change the placement of this method
 # as it also serves as a fallback for wrong url routes

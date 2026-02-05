@@ -65,6 +65,13 @@ const Report = React.lazy(
   () => import(/* webpackChunkName: "Report" */ 'pages/Report/Report'),
 );
 
+const AgentAnswers = React.lazy(
+  () =>
+    import(
+      /* webpackChunkName: "agent-answers" */ 'pages/AgentAnswers/AgentAnswers'
+    ),
+);
+
 export interface IRoute {
   path: PathEnum;
   component:
@@ -95,6 +102,15 @@ const routes: { [key: string]: any } = {
     icon: 'runs',
     isExact: true,
     title: pageTitlesEnum.RUNS_EXPLORER,
+  },
+  AGENT_ANSWERS: {
+    path: PathEnum.Agent_Answers,
+    component: AgentAnswers,
+    showInSidebar: true,
+    displayName: 'Agent Answers',
+    icon: 'agent',
+    isExact: true,
+    title: 'Agent Answers',
   },
   METRICS: {
     path: PathEnum.Metrics,
