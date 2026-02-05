@@ -3,6 +3,7 @@ import { useModel } from 'hooks';
 
 import {
   IconCheck,
+  IconCode,
   IconEye,
   IconEyeOff,
   IconKey,
@@ -28,6 +29,9 @@ interface RunState {
   isLoading: boolean;
   showResponse: boolean;
   error: string;
+  code: string;
+  showCode: boolean;
+  isLoadingCode: boolean;
 }
 
 // Storage key for API key (using sessionStorage for security - cleared on browser close)
@@ -79,6 +83,9 @@ const Control = () => {
         isLoading: false,
         showResponse: false,
         error: '',
+        code: '',
+        showCode: false,
+        isLoadingCode: false,
       }
     );
   };
@@ -108,6 +115,18 @@ const Control = () => {
 
     ws.onmessage = (event) => {
       console.log(`Message from ${runHash}:`, event.data);
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'code_response') {
+          updateRunState(runHash, {
+            code: data.payload || 'No code received',
+            showCode: true,
+            isLoadingCode: false,
+          });
+        }
+      } catch (e) {
+        console.error('Failed to parse WebSocket message:', e);
+      }
     };
 
     ws.onerror = (error) => {
@@ -145,7 +164,6 @@ const Control = () => {
       console.error(`WebSocket is not open for run hash: ${runHash}`);
     }
   };
-
   const callOpenAI = async (runHash: string, prompt: string) => {
     if (!apiKey) {
       updateRunState(runHash, {
@@ -477,6 +495,92 @@ const Control = () => {
                         paddingTop: '$5',
                       }}
                     >
+                      {/* Get Code Button */}
+                      <Box css={{ marginBottom: '$5' }}>
+                        <Button
+                          size='md'
+                          variant='outlined'
+                          color='secondary'
+                          onClick={() => {
+                            sendToControlServer(hash, 'get_code');
+                          }}
+                          disabled={state.isLoadingCode}
+                          leftIcon={
+                            state.isLoadingCode ? undefined : (
+                              <IconCode size={16} />
+                            )
+                          }
+                        >
+                          {state.isLoadingCode ? (
+                            <Box
+                              css={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '$3',
+                              }}
+                            >
+                              <Spinner size={16} thickness={2} />
+                              <span>Fetching Code...</span>
+                            </Box>
+                          ) : (
+                            'Get Code'
+                          )}
+                        </Button>
+                      </Box>
+
+                      {/* Code Display Panel */}
+                      {state.showCode && (
+                        <Box
+                          css={{
+                            backgroundColor: '$secondary10',
+                            borderRadius: '$3',
+                            padding: '$5',
+                            border: '1px solid $secondary30',
+                            marginBottom: '$5',
+                          }}
+                        >
+                          <Box
+                            css={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              marginBottom: '$4',
+                            }}
+                          >
+                            <Text size='$3' weight='$3'>
+                              Training Code
+                            </Text>
+                            <Button
+                              size='sm'
+                              variant='ghost'
+                              color='secondary'
+                              onClick={() =>
+                                updateRunState(hash, { showCode: false })
+                              }
+                              leftIcon={<IconX size={14} />}
+                            >
+                              Close
+                            </Button>
+                          </Box>
+                          <Box
+                            css={{
+                              backgroundColor: '$background',
+                              padding: '$4',
+                              borderRadius: '$2',
+                              whiteSpace: 'pre-wrap',
+                              fontFamily: '$mono',
+                              fontSize: '$3',
+                              lineHeight: '1.6',
+                              maxHeight: '400px',
+                              overflow: 'auto',
+                              border: '1px solid $secondary20',
+                            }}
+                          >
+                            {state.code}
+                          </Box>
+                        </Box>
+                      )}
+
                       {/* Prompt Input */}
                       <Box css={{ marginBottom: '$5' }}>
                         <Text

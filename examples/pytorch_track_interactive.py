@@ -1,3 +1,4 @@
+import inspect
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -13,7 +14,7 @@ from aim.sdk.control.callback import AimInteractiveTrainCallback
 
 # # Initialize a new Run
 aim_run = Run(repo="/Users/kstarxin/Documents/test_aim", experiment='bert_training', interactive=True)
-interactive_callback = AimInteractiveTrainCallback(aim_run)
+interactive_callback = AimInteractiveTrainCallback(aim_run, train_file_path=__file__)
 
 # moving model to gpu if available
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -62,6 +63,7 @@ for epoch in range(num_epochs):
         
         if step % 5 == 0:
             print(f"Epoch {epoch}, Step {step}, Loss: {loss.item():.4f}")
+        loss = interactive_callback.intervene_loss(loss.item(), context={'epoch': epoch, 'step': step, 'batch': batch, "model": model})
 
 print("Training completed!")
 aim_run.close()
