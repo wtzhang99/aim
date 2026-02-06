@@ -61,6 +61,10 @@ const Reports = React.lazy(
   () => import(/* webpackChunkName: "Reports" */ 'pages/Reports'),
 );
 
+const AgentContainer = React.lazy(
+  () => import(/* webpackChunkName: "agent" */ 'pages/Agent/AgentContainer'),
+);
+
 const Report = React.lazy(
   () => import(/* webpackChunkName: "Report" */ 'pages/Report/Report'),
 );
@@ -95,6 +99,15 @@ const routes: { [key: string]: any } = {
     icon: 'runs',
     isExact: true,
     title: pageTitlesEnum.RUNS_EXPLORER,
+  },
+  AGENT: {
+    path: PathEnum.Agent,
+    component: AgentContainer,
+    showInSidebar: true,
+    displayName: 'Agent',
+    icon: 'runs',
+    isExact: true,
+    title: pageTitlesEnum.AGENT,
   },
   METRICS: {
     path: PathEnum.Metrics,

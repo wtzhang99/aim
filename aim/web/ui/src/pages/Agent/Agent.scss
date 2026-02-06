@@ -1,0 +1,147 @@
+@use 'src/styles/abstracts' as *;
+
+.Agent {
+  height: 100vh;
+  overflow: auto;
+  padding: 1.25rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__content {
+    display: flex;
+    gap: 1rem;
+    height: calc(100% - 4rem);
+  }
+
+  &__list {
+    width: 320px;
+    min-width: 320px;
+    padding: 1rem;
+    border-radius: $border-radius-main;
+    border: $border-grey;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+      margin-bottom: 0.75rem;
+    }
+
+    &__items {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+    }
+
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: $border-radius-main;
+      cursor: pointer;
+      transition: background 0.15s;
+
+      &:hover {
+        background: rgba(28, 40, 82, 0.05);
+      }
+
+      &--active {
+        background: #e8f1fc;
+        font-weight: $font-600;
+      }
+
+      &__hash {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: monospace;
+      }
+    }
+
+    &__empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 2rem 0;
+    }
+  }
+
+  &__instruct {
+    flex: 1;
+    padding: 1rem;
+    border-radius: $border-radius-main;
+    border: $border-grey;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: baseline;
+    }
+
+    &__selected {
+      margin-left: 0.25rem;
+    }
+
+    &__input {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-end;
+    }
+
+    &__textarea {
+      flex: 1;
+      resize: vertical;
+      padding: 0.5rem 0.75rem;
+      border: $border-grey;
+      border-radius: $border-radius-main;
+      font-family: inherit;
+      font-size: $text-md;
+      outline: none;
+      transition: border-color 0.15s;
+
+      &:focus {
+        border-color: $primary-color;
+      }
+
+      &:disabled {
+        background: #f7f8fa;
+        cursor: not-allowed;
+      }
+    }
+
+    &__sendBtn {
+      text-transform: none;
+      min-width: 80px;
+      height: 36px;
+    }
+
+    &__result {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: #f7f8fa;
+      border: $border-grey;
+      border-radius: $border-radius-main;
+
+      &__body {
+        margin: 0.5rem 0 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: $text-sm;
+        font-family: monospace;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+    }
+  }
+}

@@ -23,6 +23,7 @@ def create_app():
         max_age=86400,
     )
 
+    from aim.web.api.agent.views import agent_router
     from aim.web.api.dashboard_apps.views import dashboard_apps_router
     from aim.web.api.dashboards.views import dashboards_router
     from aim.web.api.experiments.views import experiment_router
@@ -48,6 +49,7 @@ def create_app():
 
     add_api_routes()
 
+    api_app.include_router(agent_router, prefix='/agent')
     api_app.include_router(dashboard_apps_router, prefix='/apps')
     api_app.include_router(dashboards_router, prefix='/dashboards')
     api_app.include_router(experiment_router, prefix='/experiments')
