@@ -25,7 +25,7 @@ REPO_PATH = os.path.join(os.path.dirname(__file__), "research_agent_example")
 
 async def main():
     # Create an Aim run to track metrics
-    run = Run(repo="/Users/kstarxin/Documents/test_aim")
+    run = Run(repo="/home/xuanhe_linux_001/aim_frontend_experiment2/aim/.aim")
 
     print(f"Aim Run hash: {run.hash}")
     print(f"Training repo: {REPO_PATH}")
