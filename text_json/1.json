@@ -1,5 +1,0 @@
-[
-  {"devdoc": "a", "implementation": "something", "metric": "something", "expectation": "pass", "threshold": 0.3},
-  {"devdoc": "b", "implementation": "something", "metric": "something", "expectation": "fail", "threshold": 0.3},
-  {"devdoc": "c", "implementation": "something", "metric": "something", "expectation": "pass", "threshold": 0.3}
-]
