@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { IconRobot } from '@tabler/icons-react';
-
 import { PathEnum } from 'config/enums/routesEnum';
 import pageTitlesEnum from 'config/pageTitles/pageTitles';
 
@@ -84,7 +82,6 @@ export interface IRoute {
   showInSidebar: boolean;
   displayName: string | null;
   icon?: string | null;
-  sidebarIcon?: React.ReactNode;
 }
 
 const routes: { [key: string]: any } = {
@@ -110,11 +107,10 @@ const routes: { [key: string]: any } = {
     path: PathEnum.Agent_Answers,
     component: AgentAnswers,
     showInSidebar: true,
-    displayName: 'Answers',
-    icon: null,
-    sidebarIcon: <IconRobot stroke={1.5} size={24} />,
+    displayName: 'Agent Answers',
+    icon: 'agent',
     isExact: true,
-    title: 'Answers',
+    title: 'Agent Answers',
   },
   METRICS: {
     path: PathEnum.Metrics,

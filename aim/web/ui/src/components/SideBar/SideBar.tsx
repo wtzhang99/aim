@@ -53,8 +53,7 @@ function SideBar(): React.FunctionComponentElement<React.ReactNode> {
             </NavLink>
             <div className='Sidebar__List__container ScrollBar__hidden'>
               {Object.values(routes).map((route: IRoute, index: number) => {
-                const { showInSidebar, path, displayName, icon, sidebarIcon } =
-                  route;
+                const { showInSidebar, path, displayName, icon } = route;
                 return (
                   showInSidebar && (
                     <NavLink
@@ -68,19 +67,11 @@ function SideBar(): React.FunctionComponentElement<React.ReactNode> {
                       className='Sidebar__NavLink'
                     >
                       <li className='Sidebar__List__item'>
-                        {sidebarIcon ? (
-                          <span className='Sidebar__List__item--icon Sidebar__List__item--icon-custom'>
-                            {sidebarIcon}
-                          </span>
-                        ) : (
-                          icon && (
-                            <Icon
-                              className='Sidebar__List__item--icon'
-                              fontSize={24}
-                              name={icon as IconName}
-                            />
-                          )
-                        )}
+                        <Icon
+                          className='Sidebar__List__item--icon'
+                          fontSize={24}
+                          name={icon as IconName}
+                        />
                         <span className='Sidebar__List__item--text'>
                           {displayName}
                         </span>
