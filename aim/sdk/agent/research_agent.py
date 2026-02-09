@@ -44,7 +44,7 @@ class AimResearchAgent:
         if result.returncode != 0:
             error = result.stderr.strip() or "Unknown error"
             raise RuntimeError(f"codex exec failed ({result.returncode}): {error}")
-
+        # Xuanhe Note: add key-word search here to trigger different handler.
         response_text = ""
         for line in result.stdout.strip().splitlines():
             if not line:

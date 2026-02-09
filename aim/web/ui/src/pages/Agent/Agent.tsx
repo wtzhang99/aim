@@ -8,6 +8,10 @@ import { Button, Icon, Text } from 'components/kit';
 
 import agentAppModel from 'services/models/agent/agentAppModel';
 
+import { CodexParsed, parseCodexResult } from './parseCodexResult';
+import ProbeIdeaGrid from './components/ProbeIdeaGrid';
+import DevDocGrid from './components/DevDocGrid';
+
 import './Agent.scss';
 
 interface IAgentProps {
@@ -139,11 +143,15 @@ function Agent({
                 <Text size={12} weight={600}>
                   Response ({instructResult.status})
                 </Text>
-                <pre className='Agent__instruct__result__body'>
-                  {instructResult.status === 'completed'
-                    ? instructResult.result
-                    : instructResult.error}
-                </pre>
+                {instructResult.status === 'completed' ? (
+                  renderParsedResponse(
+                    parseCodexResult(instructResult.result ?? ''),
+                  )
+                ) : (
+                  <pre className='Agent__instruct__result__body'>
+                    {instructResult.error}
+                  </pre>
+                )}
               </Paper>
             )}
           </Paper>
@@ -154,3 +162,33 @@ function Agent({
 }
 
 export default memo(Agent);
+
+function renderParsedResponse(parsed: CodexParsed): React.ReactNode {
+  switch (parsed.kind) {
+    case 'PROBE_IDEA':
+      return (
+        <div>
+          <ProbeIdeaGrid probes={parsed.probes} />
+          {renderRawDetails(parsed.raw)}
+        </div>
+      );
+    case 'DEV_DOC':
+      return (
+        <div>
+          <DevDocGrid docs={parsed.docs} />
+          {renderRawDetails(parsed.raw)}
+        </div>
+      );
+    default:
+      return <pre className='Agent__instruct__result__body'>{parsed.raw}</pre>;
+  }
+}
+
+function renderRawDetails(raw: string): React.ReactNode {
+  return (
+    <details className='Agent__structuredRaw'>
+      <summary>Raw response</summary>
+      <pre className='Agent__instruct__result__body'>{raw}</pre>
+    </details>
+  );
+}
